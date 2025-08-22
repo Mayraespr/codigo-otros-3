@@ -8,55 +8,63 @@ const productos = [
   {nombre: "Zapato rojo", tipo: "zapato", color: "rojo", img: "./zapato-rojo.jpg"}
 ]
 
-const li = document.getElementsByName("lista-de-productos")
+//Cambiamos todas las contanstantes var a let o const
+const li = document.getElementById("lista-de-productos"); //cambiamos el get element a ID 
 const $i = document.querySelector('.input');
+const botonDeFiltro = document.querySelector("button");//movemos de lugar la constante del botón de filtro
+//Definimos una función para mostrar productos (La estábamos mandando a llamar después y daba error)
+function displayProducto(productos) {
+  li.innerHTML = "";
 
-for (let i = 0; i < productos.length; i++) {
-  var d = document.createElement("div")
-  d.classList.add("producto")
+  productos.forEach(producto => {
+      const d = document.createElement("div");
+      d.classList.add("producto");
 
-  var ti = document.createElement("p")
-  ti.classList.add("titulo")
-  ti.textContent = productos[i].nombre
-  
-  var imagen = document.createElement("img");
-  imagen.setAttribute('src', productos[i].img);
+      const ti = document.createElement("p");
+      ti.classList.add("titulo");
+      ti.textContent = producto.nombre;
+
+      const imagen = document.createElement("img");
+      imagen.setAttribute('src', producto.img);//eliminamos el [1] porque producto ya pertenece a un arreglo
 
   d.appendChild(ti)
   d.appendChild(imagen)
+  li.appendChild(d);
 
-  li.appendChild(d)
-}
-
-displayProductos(productos)
-const botonDeFiltro = document.querySelector("button");
+  }); 
+}//displayProducto
 
 botonDeFiltro.onclick = function() {
-  while (li.firstChild) {
-    li.removeChild(li.firstChild);
-  }
-
   const texto = $i.value;
-  console.log(texto);
-  const productosFiltrados = filtrado(productos, texto );
-
-  for (let i = 0; i < productosFiltrados.length; i++) {
-    var d = document.createElement("div")
-    d.classList.add("producto")
-  
-    var ti = document.createElement("p")
-    ti.classList.add("titulo")
-    ti.textContent = productosFiltrados[i].nombre
-    
-    var imagen = document.createElement("img");
-    imagen.setAttribute('src', productosFiltrados[i].img);
-  
-    d.appendChild(ti)
-    d.appendChild(imagen)
-  
-    li.appendChild(d)
-  }
+  const productosFiltrados = filtrado(productos, texto);
+  displayProducto(productosFiltrados);
 }
+// botonDeFiltro.onclick = function() {
+//   while (li.firstChild) {
+//     li.removeChild(li.firstChild);
+//   }
+
+//   const texto = $i.value;
+//   console.log(texto);
+//   const productosFiltrados = filtrado(productos, texto );
+
+//   for (let i = 0; i < productosFiltrados.length; i++) {
+//     var d = document.createElement("div")
+//     d.classList.add("producto")
+  
+//     let ti = document.createElement("p")
+//     ti.classList.add("titulo")
+//     ti.textContent = productosFiltrados[i].nombre
+    
+//     let imagen = document.createElement("img");
+//     imagen.setAttribute('src', productosFiltrados[i].img);
+  
+//     d.appendChild(ti)
+//     d.appendChild(imagen)
+  
+//     li.appendChild(d)
+//   }
+// }
 
 const filtrado = (productos = [], texto) => {
   return productos.filter(item => item.tipo.includes(texto) || item.color.includes(texto));
